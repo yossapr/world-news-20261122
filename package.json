@@ -1,0 +1,8 @@
+{
+  "name": "one-day-front-page",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A 1024x1024 front page summing up Sunday 22 November 2026, entered in make.fun bounty news-image-20261122.",
+  "license": "MIT"
+}
