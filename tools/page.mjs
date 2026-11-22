@@ -12,7 +12,14 @@ const coast = readFileSync(local('./land-path.txt'), 'utf8').trim();
 const escape = (value) => String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 const storyAt = (n) => edition.stories.find((story) => story.n === n);
 const regionStyle = (id) => copy.regions[id] ?? copy.regions.world;
-const tally = edition.stories.reduce((acc, story) => ({ ...acc, [story.region]: (acc[story.region] ?? 0) + 1 }), {});
+
+// The edition files Australia under Asia. A front page puts a story where its dateline is, so the
+// four Australian stories move to Oceania, and the two English league matches stay in Europe.
+// The six items that cross regions keep their own World band: an EU-Indonesia trade deal, two
+// rugby internationals between hemispheres, a tennis final, and the two club matches above.
+const DATELINE_REGION = { 13: 'oceania', 27: 'oceania', 28: 'oceania', 29: 'oceania', 33: 'europe', 35: 'europe' };
+const regionOf = (story) => DATELINE_REGION[story.n] ?? story.region;
+const tally = edition.stories.reduce((acc, story) => ({ ...acc, [regionOf(story)]: (acc[regionOf(story)] ?? 0) + 1 }), {});
 const pad = (n) => String(n).padStart(2, '0');
 
 // Mix a colour towards the paper, so each card's scene sits on its region's own tint.
@@ -61,7 +68,7 @@ const TOP = 12; const HEIGHT = 118;
 const plot = (lon, lat) => [lon + 180, 84 - Math.min(74, Math.max(-46, lat))];
 const dotFor = (story, radius) => {
   const [x, y] = plot(story.geo.lon, story.geo.lat);
-  return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${radius}" fill="${regionStyle(story.region)[2]}" opacity="${radius > 2.5 ? 1 : 0.92}"/>`;
+  return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${radius}" fill="${regionStyle(regionOf(story))[2]}" opacity="${radius > 2.5 ? 1 : 0.92}"/>`;
 };
 const quietDots = edition.stories.filter((story) => story.geo && story.tier !== 'lead').map((story) => dotFor(story, 2.2)).join('');
 const loudDots = [1, 2, 3].map((n) => {
@@ -69,7 +76,7 @@ const loudDots = [1, 2, 3].map((n) => {
   const [x, y] = plot(story.geo.lon, story.geo.lat);
   const place = copy.labels[n];
   const anchor = place.anchor ? ` text-anchor="${place.anchor}"` : '';
-  return `<g><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="#0f2433"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.4" fill="${regionStyle(story.region)[2]}"/>` +
+  return `<g><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="#0f2433"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.4" fill="${regionStyle(regionOf(story))[2]}"/>` +
     `<text x="${x.toFixed(1)}" y="${(y + 2.1).toFixed(1)}" class="mn">${n}</text>` +
     `<text x="${(x + place.dx).toFixed(1)}" y="${(y + place.dy).toFixed(1)}" class="ml"${anchor}>${place.label}</text></g>`;
 }).join('');
@@ -229,23 +236,23 @@ const SCENE = {
 };
 
 const leadBlock = (lead) => {
-  const region = regionStyle(storyAt(lead.n).region);
+  const region = regionStyle(regionOf(storyAt(lead.n)));
   return `<article class="lead" style="--lc:${region[1]}"><div class="lart">${DRAWING[lead.art]}
 <div class="lband"><span><b>${escape(lead.tag)}</b> &middot; ${escape(lead.src)}</span><span>${escape(lead.mark[0])}: ${escape(lead.mark[1])}</span></div></div>
-<div class="lk"><i>${pad(lead.n)}</i>${escape(`${lead.p} · ${lead.t}`)}</div>
+<div class="lk"><i>${pad(lead.n)}</i>${escape(`${lead.p} · ${lead.t}`)}<span class="ld">22 NOV</span></div>
 <h3>${lead.head.map(escape).join('<br>')}</h3><p class="deck">${escape(lead.deck)}</p></article>`;
 };
 
 const cardBlock = (card, index) => {
-  const region = regionStyle(storyAt(card.n).region);
+  const region = regionStyle(regionOf(storyAt(card.n)));
   return `<article class="card" style="--gc:${region[1]}">
 <div class="chead"><span class="cnum">${pad(index + 4)}</span><span class="ck">${escape(`${card.p} · ${card.t}`)}</span></div>
 <div class="cart"><svg viewBox="0 0 240 52" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${SCENE[card.glyph](region[1], region[2])}</svg></div>
 <h4>${escape(card.h)}</h4><p><b>${escape(card.d)}</b> &middot; ${escape(card.b)}</p>
-<div class="src"><span class="tag">${escape(card.tag)}</span> &middot; ${escape(card.s)}</div></article>`;
+<div class="src"><span class="tag">${escape(card.tag)}</span> &middot; ${escape(card.s)} &middot; <span class="dt">22 NOV</span></div></article>`;
 };
 
-const briefItem = (item) => `<li style="--gc:${regionStyle(storyAt(item.n).region)[1]}"><span class="bn">${pad(item.n)}</span><b>${escape(item.p)}</b> ${escape(item.t)} <span class="bs">${escape(item.s)}</span></li>`;
+const briefItem = (item) => `<li style="--gc:${regionStyle(regionOf(storyAt(item.n)))[1]}"><span class="bn">${pad(item.n)}</span><b>${escape(item.p)}</b> ${escape(item.t)} <span class="bs">${escape(item.s)} &middot; 22 NOV</span></li>`;
 
 // Briefs run down three columns of near-equal length: the longest columns come first.
 const perColumn = Math.ceil(copy.briefs.length / 3);
@@ -298,7 +305,8 @@ body{background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-s
 .lband span+span{flex:0 1 auto}
 .lk{display:flex;align-items:center;gap:6px;margin-top:4px;font-size:7.3px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:#332d26;white-space:nowrap;overflow:hidden}
 .lk i{flex:0 0 auto;font-style:normal;background:var(--lc);color:#f7f3ea;padding:1.5px 5px 1px;font-size:7.6px;letter-spacing:.06em}
-.lead h3{font-family:Georgia,serif;font-size:26px;line-height:1;letter-spacing:-.02em;margin:3px 0 2px}
+.ld{margin-left:auto;flex:0 0 auto;font-size:7px;letter-spacing:.1em;color:var(--accent)}
+.lead h3{font-family:Georgia,serif;font-size:30px;line-height:0.98;letter-spacing:-.02em;margin:3px 0 2px}
 .lead .deck{font-size:9.2px;line-height:1.16;color:#332d26}
 .mid{display:grid;grid-template-columns:1fr 296px;gap:14px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:4px 0 4px}
 h5{font-size:8.4px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:2px}
@@ -322,24 +330,25 @@ h5 span{color:var(--muted);letter-spacing:.04em;text-transform:none;font-weight:
 .card{padding:0 0 2px;border-top:3px solid var(--gc);min-width:0}
 .chead{display:flex;align-items:center;gap:5px;min-width:0;margin:2px 0 3px}
 .cnum{flex:0 0 auto;background:var(--gc);color:#f7f3ea;font-size:7.6px;font-weight:700;padding:1.5px 4px 1px;letter-spacing:.04em}
-.ck{flex:1 1 auto;min-width:0;font-size:6.6px;letter-spacing:.05em;text-transform:uppercase;color:#4a433b;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ck{flex:1 1 auto;min-width:0;font-size:6.9px;letter-spacing:.05em;text-transform:uppercase;color:#4a433b;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cart{height:36px;overflow:hidden;margin-bottom:3px}
 .cart svg{display:block;width:100%;height:36px}
-.card h4{font-family:Georgia,serif;font-size:11.6px;line-height:1.03;letter-spacing:-.01em;margin:0 0 1px}
+.card h4{font-family:Georgia,serif;font-size:13px;line-height:1.02;letter-spacing:-.01em;margin:0 0 1px}
 .card p{font-size:7.8px;line-height:1.12;color:#4a433b}
 .card p b{color:var(--ink)}
 .card .tag{color:var(--accent);font-weight:700}
+.dt{color:#5d554b;font-weight:700}
 .src{font-size:7px;letter-spacing:.05em;text-transform:uppercase;color:#8a8074;margin-top:2px}
 .briefs-head{border-top:2px solid var(--rule);padding-top:3px;display:flex;justify-content:space-between;align-items:baseline}
 .briefs-head h5{margin:0}
 .briefs-head .cnt{font-size:7.7px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .briefs{flex:1;min-height:0;border-top:1px solid var(--soft);padding:4px 0 2px;margin-top:3px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 16px}
 ul.b{list-style:none;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
-ul.b li{font-size:9.5px;line-height:1.1;color:#2b2620;padding-left:9px;position:relative}
+ul.b li{font-size:9.9px;line-height:1.1;color:#2b2620;padding-left:9px;position:relative}
 ul.b li::before{content:'';position:absolute;left:0;top:5px;width:4px;height:4px;background:var(--gc)}
 ul.b li b{font-weight:700}
 .bn{color:#9a9082;font-weight:700;margin-right:3px;font-size:7.8px}
-.bs{color:#8a8074;font-size:6.9px;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
+.bs{color:#8a8074;font-size:6.3px;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
 .foot{border-top:1px solid var(--rule);padding-top:3px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
 .foot p{font-size:7.3px;line-height:1.24;color:#4a433b;max-width:840px}
 .foot p b{color:var(--ink)}
@@ -349,14 +358,14 @@ ul.b li b{font-weight:700}
 const page = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Sunday 22 November 2026</title><style>${stylesheet}</style></head>
 <body>
-<div class="rail"><span><b>The world in one day</b></span><span class="date">Sunday 22 November 2026</span><span>35 stories &middot; 6 regions &middot; closed 08:31 GMT</span></div>
+<div class="rail"><span><b>The world in one day</b></span><span class="date">Sunday 22 November 2026</span><span>35 stories &middot; 7 regions &middot; closed 08:31 GMT</span></div>
 <header class="mast"><h1>Sunday 22 November 2026</h1><div class="side">A front page of the day&rsquo;s reporting<b>35 stories, from Sinaloa to Canberra</b></div></header>
 ${heroBand}
 ${regionBar}
 ${clockBlock}
 <section class="leads">${copy.leads.map(leadBlock).join('')}</section>
-<section class="mid"><div><h5>Where it happened, Sunday 22 November 2026 <span>one dot for each dateline, coloured by region; the numbered three are the leads</span></h5>${worldMap}</div>
-<div class="daynote"><h5>The day in one sentence</h5><p class="lede"><b>400 drones</b> over Kyiv and its bridges, a <b>climate draft</b> on the table in Antalya, two <b>US bases</b> struck in Bahrain, a <b>cartel boss</b> held in Sinaloa and a boat of <b>mourners</b> lost in Nigeria: one Sunday, 35 stories, six regions.</p>
+<section class="mid"><div><h5>Where it happened, Sunday 22 November 2026 <span>one dot for each dateline, one dot per story, coloured by its region; the three leads are numbered</span></h5>${worldMap}</div>
+<div class="daynote"><h5>The day in one sentence</h5><p class="lede"><b>400 drones</b> over Kyiv and its bridges, a <b>climate draft</b> on the table in Antalya, two <b>US bases</b> struck in Bahrain, a <b>cartel boss</b> held in Sinaloa and a boat of <b>mourners</b> lost in Nigeria: one Sunday, 35 stories, seven regions.</p>
 <div class="legend"><div><span class="sw dot"></span>one dot per dateline, in its region&rsquo;s colour</div>
 <div><span class="sw lead">1</span>the three leads, numbered on the map</div>
 <div><span class="sw prov">CLAIMED</span>what kind of claim it is: claimed, official or reported</div>
@@ -365,7 +374,7 @@ ${clockBlock}
 <section class="cards">${copy.cards.map((card, index) => cardBlock(card, index)).join('')}</section>
 <section class="briefs-head"><h5>And in brief <span>the rest of the day, place by place</span></h5><span class="cnt">22 more stories</span></section>
 <section class="briefs">${briefColumns.join('')}</section>
-<footer class="foot"><p>The map is drawn from Natural Earth land outlines; every story above is dated to this edition and every outlet is named with it. Figures in the top band are the edition&rsquo;s own, each carried by a story below.</p><div class="mark">One day &middot; 35 stories &middot; 6 regions</div></footer>
+<footer class="foot"><p>The map is drawn from Natural Earth land outlines; every story above is dated to this edition and every outlet is named with it. Figures in the top band are the edition&rsquo;s own, each carried by a story below.</p><div class="mark">One day &middot; 35 stories &middot; 7 regions</div></footer>
 </body></html>`;
 
 writeFileSync(local('./poster.html'), page);

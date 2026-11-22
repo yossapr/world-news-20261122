@@ -1,77 +1,436 @@
 {
   "regions": {
-    "europe": ["Europe", "#1f4e79", "#6ea8e0"],
-    "middle-east": ["Middle East", "#a8600f", "#e0a94f"],
-    "asia": ["Asia", "#a8321f", "#ef6a4a"],
-    "africa": ["Africa", "#1c6b4a", "#4fbf8b"],
-    "americas": ["Americas", "#5a3a86", "#a987e0"],
-    "oceania": ["Oceania", "#0d6070", "#45c2d6"],
-    "world": ["World", "#43403a", "#c9ced4"]
+    "europe": [
+      "Europe",
+      "#1f4e79",
+      "#6ea8e0"
+    ],
+    "middle-east": [
+      "Middle East",
+      "#a8600f",
+      "#e0a94f"
+    ],
+    "asia": [
+      "Asia",
+      "#a8321f",
+      "#ef6a4a"
+    ],
+    "africa": [
+      "Africa",
+      "#1c6b4a",
+      "#4fbf8b"
+    ],
+    "americas": [
+      "Americas",
+      "#5a3a86",
+      "#a987e0"
+    ],
+    "oceania": [
+      "Oceania",
+      "#0d6070",
+      "#45c2d6"
+    ],
+    "world": [
+      "World",
+      "#43403a",
+      "#c9ced4"
+    ]
   },
   "hero": [
-    {"fig": "1.5°C", "label": "the warming limit the COP31 draft says will pass"},
-    {"fig": "400", "label": "drones in Russia’s overnight attack"},
-    {"fig": "2", "label": "US bases struck in Bahrain"},
-    {"fig": "24", "label": "dead when a mourners’ boat sank in Bayelsa"},
-    {"fig": "23,000", "label": "German workers IG Metall calls out on Monday"},
-    {"fig": "14%", "label": "Nvidia’s one-day fall; 20% for the week"}
+    {
+      "fig": "1.5°C",
+      "label": "limit the COP31 draft says will pass"
+    },
+    {
+      "fig": "400",
+      "label": "drones in Russia’s night attack"
+    },
+    {
+      "fig": "2",
+      "label": "US bases struck in Bahrain"
+    },
+    {
+      "fig": "24",
+      "label": "dead in a Nigerian boat capsize"
+    },
+    {
+      "fig": "23,000",
+      "label": "German workers out on Monday"
+    },
+    {
+      "fig": "14%",
+      "label": "Nvidia’s one-day fall; 20% this week"
+    }
   ],
   "leads": [
-    {"n": 1, "p": "ANTALYA, TURKEY", "t": "CLIMATE", "tag": "Reported", "src": "Reuters · BBC", "art": "deal", "head": ["COP31 closes in", "on a final deal"], "deck": "A new draft would acknowledge warming will pass 1.5°C; oil producers fought to keep fossil fuels out, and objections closed at 03:00 GMT.", "mark": ["Deadline", "session 07:00 GMT"]},
-    {"n": 2, "p": "KYIV, UKRAINE", "t": "WAR", "tag": "Reported", "src": "Al Jazeera", "art": "bridge", "head": ["Kyiv’s bridges hit", "in a 400-drone night"], "deck": "400 drones and 110 missiles in one of the war’s largest overnight attacks; three Dnipro bridges and a 750-kV substation were hit.", "mark": ["Since yesterday", "Crimea bridge threat"]},
-    {"n": 3, "p": "MANAMA, BAHRAIN", "t": "IRAN WAR", "tag": "Claimed", "src": "Fars · CNA", "art": "bases", "head": ["Iran strikes two", "US bases in Bahrain"], "deck": "The Revolutionary Guard says it hit bases at Sheikh Isa and Al Juffair; Bahrain says the drones were intercepted. Tankers were hit in Hormuz.", "mark": ["Sourcing", "damage unverified"]}
+    {
+      "n": 1,
+      "p": "ANTALYA",
+      "t": "CLIMATE",
+      "tag": "Reported",
+      "src": "Reuters · BBC",
+      "art": "deal",
+      "head": [
+        "COP31 closes in",
+        "on a final deal"
+      ],
+      "deck": "A draft that admits warming will pass 1.5°C; objections closed at 03:00 GMT.",
+      "mark": [
+        "Deadline",
+        "session 07:00 GMT"
+      ]
+    },
+    {
+      "n": 2,
+      "p": "KYIV",
+      "t": "WAR",
+      "tag": "Reported",
+      "src": "Al Jazeera",
+      "art": "bridge",
+      "head": [
+        "Kyiv’s bridges hit",
+        "in a 400-drone night"
+      ],
+      "deck": "400 drones, 110 missiles, three Dnipro bridges and a 750-kV substation hit.",
+      "mark": [
+        "Since yesterday",
+        "Crimea bridge threat"
+      ]
+    },
+    {
+      "n": 3,
+      "p": "MANAMA",
+      "t": "IRAN WAR",
+      "tag": "Claimed",
+      "src": "Fars · CNA",
+      "art": "bases",
+      "head": [
+        "Iran strikes two",
+        "US bases in Bahrain"
+      ],
+      "deck": "The Guard says it hit Sheikh Isa and Al Juffair; Bahrain says they were intercepted.",
+      "mark": [
+        "Sourcing",
+        "damage unverified"
+      ]
+    }
   ],
   "cards": [
-    {"n": 4, "glyph": "ship", "p": "GULF OF FINLAND", "t": "SHIPPING", "tag": "Claimed", "d": "16 crew out", "h": "Russian cargo ship burns after a strike", "b": "Finland says Ukraine was likely behind it; the crew reached lifeboats.", "s": "BBC"},
-    {"n": 5, "glyph": "burst", "p": "KRYVYI RIH", "t": "WAR", "tag": "Official", "d": "60 wounded", "h": "A strike hits Zelensky’s home city", "b": "Two people were killed, six of them children; 25 apartment blocks were damaged.", "s": "Al Jazeera"},
-    {"n": 6, "glyph": "boat", "p": "BAYELSA, NIGERIA", "t": "DISASTER", "tag": "Official", "d": "24 dead", "h": "A boat of mourners capsizes", "b": "Up to 300 were aboard; 24 were rescued and needed medical care.", "s": "DW · Sky News"},
-    {"n": 7, "glyph": "talks", "p": "JERUSALEM", "t": "POLITICS", "tag": "Reported", "d": "Likud invited", "h": "Eisenkot opens coalition talks", "b": "He is bidding for the broadest possible government.", "s": "Reuters"},
-    {"n": 8, "glyph": "aid", "p": "GAZA", "t": "AID", "tag": "Reported", "d": "3 killed", "h": "A strike hits a food aid vehicle", "b": "World Central Kitchen papers were found inside the wreck.", "s": "Al Jazeera · Reuters"},
-    {"n": 10, "glyph": "bolt", "p": "TEHRAN", "t": "ENERGY", "tag": "Official", "d": "2-hour cuts", "h": "Iran rations power from today", "b": "Electricity is cut about two hours every two days as war damage bites.", "s": "Straits Times"},
-    {"n": 9, "glyph": "cuffs", "p": "SINALOA, MEXICO", "t": "DRUGS", "tag": "Official", "d": "11 dead", "h": "‘El Chapo Isidro’ is caught", "b": "The FBI had a $5m reward on the cartel boss; violence followed.", "s": "Sky News · BBC"},
-    {"n": 11, "glyph": "probe", "p": "WASHINGTON", "t": "MARKETS", "tag": "Reported", "d": "−14%", "h": "Nvidia faces an SEC accounting probe", "b": "The inquiry is at an early stage; weekly losses passed 20%.", "s": "Straits Times"},
-    {"n": 12, "glyph": "pulse", "p": "BRASILIA", "t": "HEALTH", "tag": "Official", "d": "In intensive care", "h": "Bolsonaro has a bowel obstruction", "b": "The hospital says the former president is stable.", "s": "Al Jazeera · Reuters"},
-    {"n": 13, "glyph": "sub", "p": "CANBERRA", "t": "DEFENCE", "tag": "Official", "d": "Report rejected", "h": "Marles rejects AUKUS sub report", "b": "The defence minister says the budget office is wrong.", "s": "ABC · Reuters"}
+    {
+      "n": 4,
+      "glyph": "ship",
+      "p": "GULF OF FINLAND",
+      "t": "SHIPPING",
+      "tag": "Claimed",
+      "d": "16 crew out",
+      "h": "Cargo ship burns after strike",
+      "b": "All 16 reached the lifeboats.",
+      "s": "BBC"
+    },
+    {
+      "n": 5,
+      "glyph": "burst",
+      "p": "KRYVYI RIH",
+      "t": "WAR",
+      "tag": "Official",
+      "d": "60 wounded",
+      "h": "Strike hits Zelensky’s home",
+      "b": "Two killed, six of them children.",
+      "s": "Al Jazeera"
+    },
+    {
+      "n": 6,
+      "glyph": "boat",
+      "p": "BAYELSA",
+      "t": "DISASTER",
+      "tag": "Official",
+      "d": "24 dead",
+      "h": "Mourners’ boat capsizes",
+      "b": "Up to 300 aboard; 24 rescued.",
+      "s": "DW · Sky"
+    },
+    {
+      "n": 7,
+      "glyph": "talks",
+      "p": "JERUSALEM",
+      "t": "POLITICS",
+      "tag": "Reported",
+      "d": "Likud invited",
+      "h": "Eisenkot opens talks",
+      "b": "He wants the broadest government.",
+      "s": "Reuters"
+    },
+    {
+      "n": 8,
+      "glyph": "aid",
+      "p": "GAZA",
+      "t": "AID",
+      "tag": "Reported",
+      "d": "3 killed",
+      "h": "Food aid vehicle struck",
+      "b": "Aid agency papers in the wreck.",
+      "s": "Al Jazeera"
+    },
+    {
+      "n": 10,
+      "glyph": "bolt",
+      "p": "TEHRAN",
+      "t": "ENERGY",
+      "tag": "Official",
+      "d": "2-hour cuts",
+      "h": "Iran rations power from today",
+      "b": "Two hours a day, every two days.",
+      "s": "Straits Times"
+    },
+    {
+      "n": 9,
+      "glyph": "cuffs",
+      "p": "SINALOA",
+      "t": "DRUGS",
+      "tag": "Official",
+      "d": "11 dead",
+      "h": "‘El Chapo Isidro’ is caught",
+      "b": "The FBI had a $5m reward on him.",
+      "s": "Sky · BBC"
+    },
+    {
+      "n": 11,
+      "glyph": "probe",
+      "p": "WASHINGTON",
+      "t": "MARKETS",
+      "tag": "Reported",
+      "d": "−14%",
+      "h": "Nvidia faces an SEC probe",
+      "b": "Early stage; the week closed 20% down.",
+      "s": "Straits Times"
+    },
+    {
+      "n": 12,
+      "glyph": "pulse",
+      "p": "BRASILIA",
+      "t": "HEALTH",
+      "tag": "Official",
+      "d": "In intensive care",
+      "h": "Bolsonaro in intensive care",
+      "b": "The hospital says he is stable.",
+      "s": "Al Jazeera"
+    },
+    {
+      "n": 13,
+      "glyph": "sub",
+      "p": "CANBERRA",
+      "t": "DEFENCE",
+      "tag": "Official",
+      "d": "Report rejected",
+      "h": "Marles rejects AUKUS report",
+      "b": "The report is wrong, he says.",
+      "s": "ABC"
+    }
   ],
   "briefs": [
-    {"n": 14, "p": "US", "t": "The FBI probes an apparent hack of its crime database.", "s": "BBC"},
-    {"n": 15, "p": "US", "t": "A teen gamer helps the FBI rescue a girl online.", "s": "BBC"},
-    {"n": 16, "p": "US", "t": "Vance is cornered by the midterm defeat.", "s": "ST"},
-    {"n": 17, "p": "Saudi Arabia", "t": "Air defences down a missile.", "s": "Investing.com"},
-    {"n": 18, "p": "Lebanon", "t": "Aoun demands a pullout from ‘every inch’.", "s": "Al Jazeera"},
-    {"n": 19, "p": "Iran", "t": "Pezeshkian says the US wages a ‘silent economic war’.", "s": "Al Jazeera"},
-    {"n": 20, "p": "Hormuz", "t": "Pugh swims the strait as a tanker is hit nearby.", "s": "BBC"},
-    {"n": 21, "p": "Moldova", "t": "A Russian drone enters its airspace twice.", "s": "Kyiv Ind."},
-    {"n": 22, "p": "Belgium", "t": "Air traffic stops for the 23 November strike.", "s": "ST"},
-    {"n": 23, "p": "Germany", "t": "IG Metall calls out 23,000 workers on Monday.", "s": "Reuters"},
-    {"n": 24, "p": "Portugal", "t": "Thousands march in Lisbon over living costs.", "s": "Reuters"},
-    {"n": 25, "p": "Denmark", "t": "A Russian attaché is expelled over a murder plot.", "s": "Guardian"},
-    {"n": 26, "p": "Bangladesh", "t": "20 to 30 Awami League homes are set on fire.", "s": "TOI"},
-    {"n": 27, "p": "Australia", "t": "Fred Nile, a former NSW MP, dies at 92.", "s": "ABC"},
-    {"n": 28, "p": "Canberra", "t": "Bystanders pull a driver from a burning car.", "s": "ABC"},
-    {"n": 29, "p": "Melbourne", "t": "Dawn Fraser marks 70 years since the 1956 Games.", "s": "ABC"},
-    {"n": 30, "p": "Trade", "t": "The EU and Indonesia sign a deal after 10 years.", "s": "DW"},
-    {"n": 31, "p": "Rugby", "t": "England beat New Zealand 37-12 at Twickenham.", "s": "Reuters"},
-    {"n": 32, "p": "Rugby", "t": "France beat Argentina to reach the final.", "s": "Reuters"},
-    {"n": 33, "p": "Football", "t": "Arsenal draw 2-2; Leeds win 4-1 at Chelsea.", "s": "BBC"},
-    {"n": 34, "p": "Tennis", "t": "Zverev and Alcaraz meet in today’s ATP final.", "s": "TOI"},
-    {"n": 35, "p": "Football", "t": "Liverpool host Manchester United at Anfield.", "s": "Al Jazeera"}
+    {
+      "n": 14,
+      "p": "US",
+      "t": "FBI probes hack of crime database.",
+      "s": "BBC"
+    },
+    {
+      "n": 15,
+      "p": "US",
+      "t": "Teen gamer helps FBI rescue girl.",
+      "s": "BBC"
+    },
+    {
+      "n": 16,
+      "p": "US",
+      "t": "Vance cornered by midterm defeat.",
+      "s": "ST"
+    },
+    {
+      "n": 17,
+      "p": "Saudi Arabia",
+      "t": "Air defences down a missile.",
+      "s": "Investing"
+    },
+    {
+      "n": 18,
+      "p": "Lebanon",
+      "t": "Aoun demands pullout from ‘every inch’.",
+      "s": "Al Jazeera"
+    },
+    {
+      "n": 19,
+      "p": "Iran",
+      "t": "Pezeshkian warns of ‘economic war’.",
+      "s": "Al Jazeera"
+    },
+    {
+      "n": 20,
+      "p": "Hormuz",
+      "t": "Pugh swims Hormuz; tanker hit nearby.",
+      "s": "BBC"
+    },
+    {
+      "n": 21,
+      "p": "Moldova",
+      "t": "Russian drone breaches airspace.",
+      "s": "Kyiv Ind."
+    },
+    {
+      "n": 22,
+      "p": "Belgium",
+      "t": "Air traffic stops for Monday strike.",
+      "s": "ST"
+    },
+    {
+      "n": 23,
+      "p": "Germany",
+      "t": "IG Metall calls out 23,000.",
+      "s": "Reuters"
+    },
+    {
+      "n": 24,
+      "p": "Portugal",
+      "t": "Thousands march in Lisbon.",
+      "s": "Reuters"
+    },
+    {
+      "n": 25,
+      "p": "Denmark",
+      "t": "Attaché expelled over murder plot.",
+      "s": "Guardian"
+    },
+    {
+      "n": 26,
+      "p": "Bangladesh",
+      "t": "30 Awami League homes set on fire.",
+      "s": "TOI"
+    },
+    {
+      "n": 27,
+      "p": "Australia",
+      "t": "Fred Nile dies at 92.",
+      "s": "ABC"
+    },
+    {
+      "n": 28,
+      "p": "Canberra",
+      "t": "Bystanders pull driver from car.",
+      "s": "ABC"
+    },
+    {
+      "n": 29,
+      "p": "Melbourne",
+      "t": "70 years since 1956 Games opened.",
+      "s": "ABC"
+    },
+    {
+      "n": 30,
+      "p": "Trade",
+      "t": "EU and Indonesia sign a trade deal.",
+      "s": "DW"
+    },
+    {
+      "n": 31,
+      "p": "Rugby",
+      "t": "England beat New Zealand 37-12.",
+      "s": "Reuters"
+    },
+    {
+      "n": 32,
+      "p": "Rugby",
+      "t": "France beat Argentina to reach final.",
+      "s": "Reuters"
+    },
+    {
+      "n": 33,
+      "p": "Football",
+      "t": "Arsenal 2-2; Leeds win 4-1.",
+      "s": "BBC"
+    },
+    {
+      "n": 34,
+      "p": "Tennis",
+      "t": "Zverev and Alcaraz meet in the final.",
+      "s": "TOI"
+    },
+    {
+      "n": 35,
+      "p": "Football",
+      "t": "Liverpool host Manchester United.",
+      "s": "Al Jazeera"
+    }
   ],
   "figures": [
-    {"fig": "400", "cap": "drones in Russia’s overnight attack", "s": "Al Jazeera"},
-    {"fig": "110", "cap": "missiles in the same attack", "s": "Al Jazeera"},
-    {"fig": "11", "cap": "dead across Ukraine, seven of them in Kyiv", "s": "Al Jazeera"},
-    {"fig": "60", "cap": "wounded in Kryvyi Rih, six of them children", "s": "Al Jazeera"},
-    {"fig": "24", "cap": "dead when a mourners’ boat sank in Bayelsa", "s": "Sky News"},
-    {"fig": "23,000", "cap": "workers IG Metall calls out on Monday", "s": "Reuters"},
-    {"fig": "14%", "cap": "Nvidia’s one-day fall; 20% for the week", "s": "Straits Times"},
-    {"fig": "$5m", "cap": "US reward for the cartel boss held in Sinaloa", "s": "BBC"},
-    {"fig": "15 km", "cap": "Lewis Pugh’s swim through the Strait of Hormuz", "s": "BBC"},
-    {"fig": "70 yrs", "cap": "since the 1956 Melbourne Olympics opened", "s": "ABC"}
+    {
+      "fig": "400",
+      "cap": "drones in Russia’s overnight attack",
+      "s": "Al Jazeera"
+    },
+    {
+      "fig": "110",
+      "cap": "missiles in the same attack",
+      "s": "Al Jazeera"
+    },
+    {
+      "fig": "11",
+      "cap": "dead across Ukraine, seven of them in Kyiv",
+      "s": "Al Jazeera"
+    },
+    {
+      "fig": "60",
+      "cap": "wounded in Kryvyi Rih, six of them children",
+      "s": "Al Jazeera"
+    },
+    {
+      "fig": "24",
+      "cap": "dead when a mourners’ boat sank in Bayelsa",
+      "s": "Sky News"
+    },
+    {
+      "fig": "23,000",
+      "cap": "workers IG Metall calls out on Monday",
+      "s": "Reuters"
+    },
+    {
+      "fig": "14%",
+      "cap": "Nvidia’s one-day fall; 20% for the week",
+      "s": "Straits Times"
+    },
+    {
+      "fig": "$5m",
+      "cap": "US reward for the cartel boss held in Sinaloa",
+      "s": "BBC"
+    },
+    {
+      "fig": "15 km",
+      "cap": "Lewis Pugh’s swim through the Strait of Hormuz",
+      "s": "BBC"
+    },
+    {
+      "fig": "70 yrs",
+      "cap": "since the 1956 Melbourne Olympics opened",
+      "s": "ABC"
+    }
   ],
   "labels": {
-    "1": {"label": "ANTALYA", "dx": -6, "dy": -6, "anchor": "end"},
-    "2": {"label": "KYIV", "dx": 6, "dy": -5, "anchor": ""},
-    "3": {"label": "MANAMA", "dx": 8, "dy": 1.5, "anchor": ""}
+    "1": {
+      "label": "ANTALYA",
+      "dx": -6,
+      "dy": -6,
+      "anchor": "end"
+    },
+    "2": {
+      "label": "KYIV",
+      "dx": 6,
+      "dy": -5,
+      "anchor": ""
+    },
+    "3": {
+      "label": "MANAMA",
+      "dx": 8,
+      "dy": 1.5,
+      "anchor": ""
+    }
   }
 }

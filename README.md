@@ -9,11 +9,11 @@ A single front page that sums up 22 November 2026 in world news: a climate draft
 The page carries the whole edition, in order and numbered from 01 to 35:
 
 - a statistics band of six figures the edition itself prints, from the 1.5°C limit the COP31 draft says will pass to IG Metall's 23,000 workers;
-- a segmented region bar (Europe 9, Middle East 8, Americas 6, World 6, Asia 5, Africa 1) over the filing clock, thirteen UTC stamps hour by hour;
-- three leads with full-width drawn art above the headline, each panel carrying its own provenance band and a numbered, region-coloured kicker;
+- a segmented region bar in seven dateline bands (Europe 11, Middle East 8, Americas 6, Oceania 4, World 4, Africa 1, Asia 1) over the filing clock, thirteen UTC stamps hour by hour;
+- three leads at 30px with full-width drawn art above the headline, each panel carrying its own provenance band and a numbered, region-coloured kicker;
 - a dot map of all 35 datelines, the day in one sentence, a four-line key to reading the page, and the date check;
 - ten cards, each with its own flat illustration of that story — a burning cargo ship, a broken apartment block, a capsizing boat, a table set for talks, a food-aid van, a blacked-out skyline, an arrest van, a falling chart, a hospital bed, a submarine beside a rejected report — plus a provenance word beside its source;
-- 22 numbered briefs in three columns.
+- ten cards and 22 briefs, each stamped `22 NOV` with its own outlet and provenance word, the briefs in three single-line columns.
 
 ## Run it
 
