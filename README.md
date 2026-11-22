@@ -8,8 +8,6 @@ A single front page that sums up 22 November 2026 in world news: a climate draft
 
 All 35 items carry their outlet's own UTC stamp, or the edition's date where the outlet gave none, so nothing on the page is undated.
 
-The region key states the page's region set once (six regions, 35 stories, summing to the edition's own count) and each lead carries the verdict its sourcing supports: Reported, or Claimed where the claim is one side's.
-
 ## Run it
 
 ```sh
