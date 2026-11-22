@@ -160,9 +160,17 @@ const cardBlock = (card) => `<article class="card" style="--gc:${regionStyle(sto
 
 const briefItem = (item) => `<li style="--gc:${regionStyle(storyAt(item.n).region)[1]}"><b>${escape(item.p)}</b> ${escape(item.t)} <span class="bs">${escape(item.s)}</span></li>`;
 
-// Briefs run down three equal columns, so the last row is never ragged.
-const columnOf = (index) => (index < 8 ? 0 : index < 15 ? 1 : 2);
-const briefColumns = [0, 1, 2].map((column) => `<ul class="b">${copy.briefs.filter((_, i) => columnOf(i) === column).map(briefItem).join('')}</ul>`);
+// Briefs run down three columns of near-equal length, so the last row is never ragged whatever
+// the edition holds: the longest columns come first and the rest take one fewer.
+const perColumn = Math.ceil(copy.briefs.length / 3);
+const longerColumns = copy.briefs.length - 3 * (perColumn - 1);
+let nextBrief = 0;
+const briefColumns = [0, 1, 2].map((column) => {
+  const size = perColumn - (column < longerColumns ? 0 : 1);
+  const briefs = copy.briefs.slice(nextBrief, nextBrief + size);
+  nextBrief += size;
+  return `<ul class="b">${briefs.map(briefItem).join('')}</ul>`;
+});
 
 const figureBlock = (figure) => `<div class="num"><div class="nf">${escape(figure.fig)}</div><div class="nc">${escape(figure.cap)} <span class="ns">&middot; ${escape(figure.s)}</span></div></div>`;
 
