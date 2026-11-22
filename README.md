@@ -6,8 +6,6 @@
 
 A single front page that sums up 22 November 2026 in world news: a climate draft on the table in Antalya, 400 drones and 110 missiles over Kyiv's bridges, Iranian drones turned back over two US bases in Bahrain, a cartel boss caught in Sinaloa and 24 mourners lost in Nigeria.
 
-All 35 items carry their outlet's own UTC stamp, or the edition's date where the outlet gave none, so nothing on the page is undated.
-
 ## Run it
 
 ```sh

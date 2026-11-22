@@ -142,16 +142,6 @@ const ICON = {
   sub: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.2 15.4c0-2.6 2.6-4 6.6-4h10.4l2.6 2-2.6 2H8.8c-4 0-6.6-1.4-6.6-4z" fill="currentColor"/><rect x="8.4" y="7.6" width="5.2" height="4" rx="1" fill="currentColor"/><path d="M11 7.6V4.4h3.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><g stroke="currentColor" stroke-width="1.4" opacity=".6" stroke-linecap="round"><path d="M3 19.4h7M13 19.4h8"/></g></svg>`,
 };
 
-// Each of the 35 items is stamped with its own time where the edition records one (the outlet's
-// UTC publishedAt), and with the edition's own date where it does not, so every line carries a when.
-if (edition.day !== '2026-11-22') throw new Error(`the edition is dated ${edition.day}`);
-const STAMP = new Map(edition.stories.map((story) => {
-  const at = (story.links ?? []).map((link) => link.publishedAt ?? '').find((value) => value.startsWith('2026-11-21'));
-  return [story.n, at ? at.slice(11, 16) : '22 NOV'];
-}));
-if (STAMP.size !== 35) throw new Error(`expected 35 stamps, got ${STAMP.size}`);
-const stampOf = (n) => STAMP.get(n) ?? '22 NOV';
-
 const clockBlock = `<section class="daystrip"><div class="ds-head"><h5>The filing clock, in UTC <span>thirteen reports stamped hour by hour, the last at 22:25 GMT, before this edition closed at 08:31 GMT</span></h5></div>
 <div class="ds-track">${CLOCK.map((tick) => `<div class="ds-i"><b>${tick.at}</b><span>${escape(tick.about)}</span></div>`).join('')}</div></section>`;
 
@@ -162,13 +152,13 @@ const leadBlock = (lead) => `<article class="lead"><div class="panel"><div class
 <div class="psub">${escape(lead.sub)}</div>
 <div class="pmark"><em>${escape(lead.mark[0])}</em> ${escape(lead.mark[1])}</div>
 </div><div class="part">${DRAWING[lead.art]}</div></div>
-<h3>${lead.head.map(escape).join('<br>')}</h3><p class="deck">${escape(lead.deck)}</p><div class="src">${escape(lead.src)} &middot; <span class="ts">${stampOf(lead.n)}</span></div></article>`;
+<h3>${lead.head.map(escape).join('<br>')}</h3><p class="deck">${escape(lead.deck)}</p><div class="src">${escape(lead.src)}</div></article>`;
 
 const cardBlock = (card) => `<article class="card" style="--gc:${regionStyle(storyAt(card.n).region)[1]}">
 <div class="chead"><span class="ck">${escape(`${card.p} · ${card.t}`)}</span><span class="cg">${ICON[card.glyph] ?? ''}</span></div>
-<h4>${escape(card.h)}</h4><p><b>${escape(card.d)}</b> &middot; ${escape(card.b)}</p><div class="src">${escape(card.s)} &middot; <span class="ts">${stampOf(card.n)}</span></div></article>`;
+<h4>${escape(card.h)}</h4><p><b>${escape(card.d)}</b> &middot; ${escape(card.b)}</p><div class="src">${escape(card.s)}</div></article>`;
 
-const briefItem = (item) => `<li style="--gc:${regionStyle(storyAt(item.n).region)[1]}"><b>${escape(item.p)}</b> ${escape(item.t)} <span class="bs">${escape(item.s)} &middot; <span class="ts">${stampOf(item.n)}</span></span></li>`;
+const briefItem = (item) => `<li style="--gc:${regionStyle(storyAt(item.n).region)[1]}"><b>${escape(item.p)}</b> ${escape(item.t)} <span class="bs">${escape(item.s)}</span></li>`;
 
 // Briefs run down three columns of near-equal length, so the last row is never ragged whatever
 // the edition holds: the longest columns come first and the rest take one fewer.
@@ -265,7 +255,6 @@ ul.b{list-style:none;display:flex;flex-direction:column;justify-content:space-be
 ul.b li{font-size:10.4px;line-height:1.13;color:#2b2620;padding-left:9px;position:relative}
 ul.b li::before{content:'';position:absolute;left:0;top:5px;width:4px;height:4px;background:var(--gc)}
 ul.b li b{font-weight:700}
-.ts{color:#3f382f;font-weight:700;letter-spacing:.02em}
 .bs{color:#8a8074;font-size:7px;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
 .foot{border-top:1px solid var(--rule);padding-top:3px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
 .foot p{font-size:7.4px;line-height:1.24;color:#4a433b;max-width:830px}
