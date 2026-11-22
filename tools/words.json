@@ -8,22 +8,30 @@
     "oceania": ["Oceania", "#0d6070", "#45c2d6"],
     "world": ["World", "#43403a", "#c9ced4"]
   },
+  "hero": [
+    {"fig": "1.5°C", "label": "the warming limit the COP31 draft says will pass"},
+    {"fig": "400", "label": "drones in Russia’s overnight attack"},
+    {"fig": "2", "label": "US bases struck in Bahrain"},
+    {"fig": "24", "label": "dead when a mourners’ boat sank in Bayelsa"},
+    {"fig": "23,000", "label": "German workers IG Metall calls out on Monday"},
+    {"fig": "14%", "label": "Nvidia’s one-day fall; 20% for the week"}
+  ],
   "leads": [
-    {"n": 1, "p": "ANTALYA, TURKEY", "t": "CLIMATE", "fig": "1.5°C", "unit": "the limit the draft will pass", "sub": "objections to 03:00 GMT; approval session at 07:00 GMT", "art": "deal", "mark": ["Time", "session set for 07:00 GMT"], "head": ["COP31 closes in", "on a final deal"], "deck": "The draft would acknowledge warming will pass 1.5°C and calls for faster carbon removal; oil producers fought to keep fossil fuels out.", "src": "Reuters · BBC"},
-    {"n": 2, "p": "KYIV, UKRAINE", "t": "WAR", "fig": "400", "unit": "drones and 110 missiles", "sub": "at least 11 dead; three Dnipro bridges hit", "art": "bridge", "mark": ["Since yesterday", "Putin threatened the Crimea bridge"], "head": ["Kyiv’s bridges hit", "in a 400-drone night"], "deck": "One of the war’s largest overnight attacks damaged three Dnipro bridges and a 750-kV substation, blacking out several regions.", "src": "Al Jazeera"},
-    {"n": 3, "p": "MANAMA, BAHRAIN", "t": "IRAN WAR", "fig": "2", "unit": "US bases struck in Bahrain", "sub": "Sheikh Isa and Al Juffair; no injuries reported", "art": "bases", "mark": ["Sourcing", "damage not independently verified"], "head": ["Iran strikes two", "US bases in Bahrain"], "deck": "The Revolutionary Guard attacked US bases at Sheikh Isa and Al Juffair, Fars reported; Bahrain says the drones were intercepted.", "src": "Al Jazeera · CNA"}
+    {"n": 1, "p": "ANTALYA, TURKEY", "t": "CLIMATE", "tag": "Reported", "src": "Reuters · BBC", "art": "deal", "head": ["COP31 closes in", "on a final deal"], "deck": "A new draft would acknowledge warming will pass 1.5°C; oil producers fought to keep fossil fuels out, and objections closed at 03:00 GMT.", "mark": ["Deadline", "session 07:00 GMT"]},
+    {"n": 2, "p": "KYIV, UKRAINE", "t": "WAR", "tag": "Reported", "src": "Al Jazeera", "art": "bridge", "head": ["Kyiv’s bridges hit", "in a 400-drone night"], "deck": "400 drones and 110 missiles in one of the war’s largest overnight attacks; three Dnipro bridges and a 750-kV substation were hit.", "mark": ["Since yesterday", "Crimea bridge threat"]},
+    {"n": 3, "p": "MANAMA, BAHRAIN", "t": "IRAN WAR", "tag": "Claimed", "src": "Fars · CNA", "art": "bases", "head": ["Iran strikes two", "US bases in Bahrain"], "deck": "The Revolutionary Guard says it hit bases at Sheikh Isa and Al Juffair; Bahrain says the drones were intercepted. Tankers were hit in Hormuz.", "mark": ["Sourcing", "damage unverified"]}
   ],
   "cards": [
-    {"n": 4, "glyph": "ship", "p": "GULF OF FINLAND", "t": "SHIPPING", "d": "16 crew out", "h": "Russian cargo ship burns after a strike", "b": "Finland says Ukraine was likely behind it; the crew reached lifeboats.", "s": "BBC"},
-    {"n": 5, "glyph": "burst", "p": "KRYVYI RIH", "t": "WAR", "d": "60 wounded", "h": "A strike hits Zelensky’s home city", "b": "Two people were killed, six of them children; 25 apartment blocks were damaged.", "s": "Al Jazeera"},
-    {"n": 6, "glyph": "boat", "p": "BAYELSA, NIGERIA", "t": "DISASTER", "d": "24 dead", "h": "A boat of mourners capsizes", "b": "Up to 300 were aboard; 24 were rescued and needed medical care.", "s": "DW · Sky News"},
-    {"n": 7, "glyph": "talks", "p": "JERUSALEM", "t": "POLITICS", "d": "Likud invited", "h": "Eisenkot opens coalition talks", "b": "He is bidding for the broadest possible government.", "s": "Reuters"},
-    {"n": 8, "glyph": "aid", "p": "GAZA", "t": "AID", "d": "3 killed", "h": "A strike hits a food aid vehicle", "b": "World Central Kitchen papers were found inside the wreck.", "s": "Al Jazeera · Reuters"},
-    {"n": 10, "glyph": "bolt", "p": "TEHRAN", "t": "ENERGY", "d": "2-hour cuts", "h": "Iran rations power from today", "b": "Electricity is cut about two hours every two days as war damage bites.", "s": "Straits Times"},
-    {"n": 9, "glyph": "cuffs", "p": "SINALOA, MEXICO", "t": "DRUGS", "d": "11 dead", "h": "‘El Chapo Isidro’ is caught", "b": "The FBI had a $5m reward on the cartel boss; violence followed.", "s": "Sky News · BBC"},
-    {"n": 11, "glyph": "probe", "p": "WASHINGTON", "t": "MARKETS", "d": "−14%", "h": "Nvidia faces an SEC accounting probe", "b": "The inquiry is at an early stage; weekly losses passed 20%.", "s": "Straits Times"},
-    {"n": 12, "glyph": "pulse", "p": "BRASILIA", "t": "HEALTH", "d": "In intensive care", "h": "Bolsonaro has a bowel obstruction", "b": "The hospital says the former president is stable.", "s": "Al Jazeera · Reuters"},
-    {"n": 13, "glyph": "sub", "p": "CANBERRA", "t": "DEFENCE", "d": "Report rejected", "h": "Marles rejects AUKUS sub report", "b": "The defence minister says the budget office is wrong.", "s": "ABC · Reuters"}
+    {"n": 4, "glyph": "ship", "p": "GULF OF FINLAND", "t": "SHIPPING", "tag": "Claimed", "d": "16 crew out", "h": "Russian cargo ship burns after a strike", "b": "Finland says Ukraine was likely behind it; the crew reached lifeboats.", "s": "BBC"},
+    {"n": 5, "glyph": "burst", "p": "KRYVYI RIH", "t": "WAR", "tag": "Official", "d": "60 wounded", "h": "A strike hits Zelensky’s home city", "b": "Two people were killed, six of them children; 25 apartment blocks were damaged.", "s": "Al Jazeera"},
+    {"n": 6, "glyph": "boat", "p": "BAYELSA, NIGERIA", "t": "DISASTER", "tag": "Official", "d": "24 dead", "h": "A boat of mourners capsizes", "b": "Up to 300 were aboard; 24 were rescued and needed medical care.", "s": "DW · Sky News"},
+    {"n": 7, "glyph": "talks", "p": "JERUSALEM", "t": "POLITICS", "tag": "Reported", "d": "Likud invited", "h": "Eisenkot opens coalition talks", "b": "He is bidding for the broadest possible government.", "s": "Reuters"},
+    {"n": 8, "glyph": "aid", "p": "GAZA", "t": "AID", "tag": "Reported", "d": "3 killed", "h": "A strike hits a food aid vehicle", "b": "World Central Kitchen papers were found inside the wreck.", "s": "Al Jazeera · Reuters"},
+    {"n": 10, "glyph": "bolt", "p": "TEHRAN", "t": "ENERGY", "tag": "Official", "d": "2-hour cuts", "h": "Iran rations power from today", "b": "Electricity is cut about two hours every two days as war damage bites.", "s": "Straits Times"},
+    {"n": 9, "glyph": "cuffs", "p": "SINALOA, MEXICO", "t": "DRUGS", "tag": "Official", "d": "11 dead", "h": "‘El Chapo Isidro’ is caught", "b": "The FBI had a $5m reward on the cartel boss; violence followed.", "s": "Sky News · BBC"},
+    {"n": 11, "glyph": "probe", "p": "WASHINGTON", "t": "MARKETS", "tag": "Reported", "d": "−14%", "h": "Nvidia faces an SEC accounting probe", "b": "The inquiry is at an early stage; weekly losses passed 20%.", "s": "Straits Times"},
+    {"n": 12, "glyph": "pulse", "p": "BRASILIA", "t": "HEALTH", "tag": "Official", "d": "In intensive care", "h": "Bolsonaro has a bowel obstruction", "b": "The hospital says the former president is stable.", "s": "Al Jazeera · Reuters"},
+    {"n": 13, "glyph": "sub", "p": "CANBERRA", "t": "DEFENCE", "tag": "Official", "d": "Report rejected", "h": "Marles rejects AUKUS sub report", "b": "The defence minister says the budget office is wrong.", "s": "ABC · Reuters"}
   ],
   "briefs": [
     {"n": 14, "p": "US", "t": "The FBI probes an apparent hack of its crime database.", "s": "BBC"},
