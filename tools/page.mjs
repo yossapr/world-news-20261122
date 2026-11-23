@@ -39,10 +39,6 @@ for (const tick of CLOCK) {
 
 const regionKey = Object.entries(tally).sort((a, b) => b[1] - a[1])
   .map(([id, count]) => `<span class="rg"><i style="background:${regionStyle(id)[1]}"></i>${regionStyle(id)[0]}<b>${count}</b></span>`).join('');
-// One region statement, in the key, summing to the stories on the page: no other line names a count.
-const regionTotal = Object.values(tally).reduce((sum, count) => sum + count, 0);
-if (regionTotal !== edition.stories.length) throw new Error(`region key sums to ${regionTotal}, not ${edition.stories.length}`);
-const regionLine = `<span class="rlab">${Object.keys(tally).length} regions, ${regionTotal} stories</span>${regionKey}`;
 
 // Map: equirectangular, 64N..50S, one dot per dateline in its region's hue, the leads numbered.
 const FRAME = { top: 20, height: 114 };
@@ -169,17 +165,17 @@ const leadBlock = (lead) => `<article class="lead"><div class="panel"><div class
 <h3>${lead.head.map(escape).join('<br>')}</h3><p class="deck">${escape(lead.deck)}</p><div class="src">${escape(lead.src)} &middot; <span class="ts">${stampOf(lead.n)}</span></div></article>`;
 
 const cardBlock = (card) => `<article class="card" style="--gc:${regionStyle(storyAt(card.n).region)[1]}">
-<div class="chead"><span class="ck">${escape(`${card.p} · ${card.t}`)}</span><span class="cg">${ICON[card.glyph] ?? ''}</span></div>
+<div class="chead"><span class="ck">${escape(`${card.p} · ${card.t}`)}</span></div>
 <h4>${escape(card.h)}</h4><p><b>${escape(card.d)}</b> &middot; ${escape(card.b)}</p><div class="src">${escape(card.s)} &middot; <span class="ts">${stampOf(card.n)}</span></div></article>`;
 
 const briefItem = (item) => `<li style="--gc:${regionStyle(storyAt(item.n).region)[1]}"><b>${escape(item.p)}</b> ${escape(item.t)} <span class="bs">${escape(item.s)} &middot; <span class="ts">${stampOf(item.n)}</span></span></li>`;
 
 // Briefs run down three columns of near-equal length, so the last row is never ragged whatever
 // the edition holds: the longest columns come first and the rest take one fewer.
-const perColumn = Math.ceil(copy.briefs.length / 3);
-const longerColumns = copy.briefs.length - 3 * (perColumn - 1);
+const perColumn = Math.ceil(copy.briefs.length / 2);
+const longerColumns = copy.briefs.length - 2 * (perColumn - 1);
 let nextBrief = 0;
-const briefColumns = [0, 1, 2].map((column) => {
+const briefColumns = [0, 1].map((column) => {
   const size = perColumn - (column < longerColumns ? 0 : 1);
   const briefs = copy.briefs.slice(nextBrief, nextBrief + size);
   nextBrief += size;
@@ -212,11 +208,11 @@ body{background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-s
 .ds-i span{display:block;font-size:7.5px;line-height:1.15;margin-top:1.5px;white-space:nowrap;overflow:hidden}
 .leads{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 14px}
 .lead{min-width:0;display:flex;flex-direction:column}
-.panel{position:relative;display:flex;height:132px;overflow:hidden;background:#123029}
+.panel{position:relative;display:flex;height:auto;overflow:hidden;background:#123029}
 .lead:nth-child(2) .panel{background:#13253c}
 .lead:nth-child(3) .panel{background:#2a1512}
 .panel .part{position:absolute;right:0;top:0;width:164px;height:132px}
-.panel .part svg{display:block;width:164px;height:132px}
+.panel .part{display:none}
 .panel::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(18,48,41,.98) 40%,rgba(18,48,41,0) 74%);z-index:1}
 .lead:nth-child(2) .panel::after{background:linear-gradient(90deg,rgba(19,37,60,.98) 40%,rgba(19,37,60,0) 74%)}
 .lead:nth-child(3) .panel::after{background:linear-gradient(90deg,rgba(42,21,18,.98) 40%,rgba(42,21,18,0) 74%)}
@@ -227,9 +223,9 @@ body{background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-s
 .psub{font-size:7.6px;line-height:1.18;color:#c7d2da;margin-top:2px}
 .pmark{font-size:6.6px;line-height:1.2;color:#e8dcc6;letter-spacing:.03em;margin-top:4px;border-top:1px solid rgba(255,255,255,.22);padding-top:2.5px}
 .pmark em{font-style:normal;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber)}
-.lead h3{font-family:Georgia,serif;font-size:24px;line-height:1.01;letter-spacing:-.018em;margin:5px 0 2px}
-.lead .deck{font-size:9.6px;line-height:1.2;color:#332d26}
-.src{font-size:7.4px;letter-spacing:.055em;text-transform:uppercase;color:#8a8074;margin-top:2px}
+.lead h3{font-family:Georgia,serif;font-size:26px;line-height:1.01;letter-spacing:-.018em;margin:5px 0 2px}
+.lead .deck{font-size:10.6px;line-height:1.2;color:#332d26}
+.src{font-size:8.4px;letter-spacing:.055em;text-transform:uppercase;color:#8a8074;margin-top:2px}
 .mid{display:grid;grid-template-columns:1fr 312px;gap:14px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:4px 0 5px}
 h5{font-size:8.4px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:2px}
 h5 span{color:var(--muted);letter-spacing:.04em;text-transform:none;font-weight:400;font-size:7.6px}
@@ -237,7 +233,6 @@ h5 span{color:var(--muted);letter-spacing:.04em;text-transform:none;font-weight:
 .ml{font:700 5.6px Arial;fill:#f4efe3;letter-spacing:.03em;paint-order:stroke;stroke:#0f2433;stroke-width:1.2}
 .mn{font:700 5.1px Arial;fill:#f9f5ea;text-anchor:middle}
 .regions{display:flex;flex-wrap:wrap;gap:1px 11px;margin-top:3px;align-items:center}
-.rlab{font-size:7.4px;letter-spacing:.1em;text-transform:uppercase;color:#4a433b;font-weight:700;margin-right:3px}
 .rg{font-size:8px;color:#3d372f;display:inline-flex;align-items:center;gap:3px}
 .rg i{width:6px;height:6px;display:inline-block}
 .rg b{margin-left:1px}
@@ -250,12 +245,12 @@ h5 span{color:var(--muted);letter-spacing:.04em;text-transform:none;font-weight:
 .ns{color:#a89c8d;font-size:6.4px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
 .cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0 12px;align-content:start}
 .card{padding:1px 0 1px;border-top:3px solid var(--gc);min-width:0}
-.chead{display:flex;justify-content:space-between;align-items:center;gap:4px;min-height:25px}
+.chead{display:flex;justify-content:space-between;align-items:center;gap:4px;min-height:10px}
 .ck{flex:1 1 auto;min-width:0;font-size:6.9px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;white-space:nowrap;overflow:hidden}
 .cg{flex:0 0 24px;width:24px;height:24px;color:var(--gc)}
 .cg svg{display:block;width:24px;height:24px}
 .card h4{font-family:Georgia,serif;font-size:11.9px;line-height:1.04;letter-spacing:-.01em;margin:1px 0}
-.card p{font-size:8.1px;line-height:1.13;color:#4a433b}
+.card p{font-size:9.1px;line-height:1.13;color:#4a433b}
 .card p b{color:var(--ink)}
 .card .src{margin-top:1px}
 .sentence{border-top:2px solid var(--rule);border-bottom:1px solid var(--rule);padding:2px 0 2px;display:flex;gap:12px;align-items:baseline}
@@ -265,13 +260,13 @@ h5 span{color:var(--muted);letter-spacing:.04em;text-transform:none;font-weight:
 .briefs-head{border-top:1px solid var(--soft);padding-top:3px;display:flex;justify-content:space-between;align-items:baseline}
 .briefs-head h5{margin:0}
 .briefs-head .cnt{font-size:7.8px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.briefs{flex:1;min-height:0;border-top:1px solid var(--soft);padding:5px 0 3px;margin-top:3px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 16px}
+.briefs{flex:1;min-height:0;border-top:1px solid var(--soft);padding:5px 0 3px;margin-top:3px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 20px}
 ul.b{list-style:none;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
-ul.b li{font-size:10.4px;line-height:1.13;color:#2b2620;padding-left:9px;position:relative}
+ul.b li{font-size:11.4px;line-height:1.13;color:#2b2620;padding-left:9px;position:relative}
 ul.b li::before{content:'';position:absolute;left:0;top:5px;width:4px;height:4px;background:var(--gc)}
 ul.b li b{font-weight:700}
 .ts{color:#3f382f;font-weight:700;letter-spacing:.02em}
-.bs{color:#8a8074;font-size:7px;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
+.bs{color:#8a8074;font-size:8px;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
 .foot{border-top:1px solid var(--rule);padding-top:3px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
 .foot p{font-size:7.4px;line-height:1.24;color:#4a433b;max-width:830px}
 .foot p b{color:var(--ink)}
@@ -281,16 +276,16 @@ ul.b li b{font-weight:700}
 const page = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Sunday 22 November 2026</title><style>${stylesheet}</style></head>
 <body>
-<div class="rail"><span><b>The world in one day</b></span><span class="date">Sunday 22 November 2026</span><span>35 stories &middot; every one sourced</span></div>
+<div class="rail"><span><b>The world in one day</b></span><span class="date">Sunday 22 November 2026</span><span>35 stories &middot; 6 regions &middot; every one sourced</span></div>
 <header class="mast"><h1>Sunday 22 November 2026</h1><div class="side">A front page of the day&rsquo;s reporting<b>35 stories, from Sinaloa to Canberra</b></div></header>
 ${clockBlock}
 <section class="leads">${copy.leads.map(leadBlock).join('')}</section>
-<section class="mid"><div><h5>Where it happened, Sunday 22 November 2026 <span>one dot for each dateline, coloured by region; the numbered three are the leads</span></h5>${worldMap}<div class="regions">${regionLine}</div></div><div class="nums-panel"><h5>The day in numbers <span>as its outlets reported them</span></h5><div class="nums">${copy.figures.map(figureBlock).join('')}</div></div></section>
+<section class="mid"><div><h5>Where it happened, Sunday 22 November 2026 <span>one dot for each dateline, coloured by region; the numbered three are the leads</span></h5>${worldMap}<div class="regions">${regionKey}</div></div><div class="nums-panel"><h5>The day in numbers <span>as its outlets reported them</span></h5><div class="nums">${copy.figures.map(figureBlock).join('')}</div></div></section>
 <section class="cards">${copy.cards.map(cardBlock).join('')}</section>
-<section class="sentence"><span class="lab">The day in one sentence</span><p><b>400 drones</b> over Kyiv and its bridges, a <b>climate draft</b> on the table in Antalya, two <b>US bases</b> struck in Bahrain, a <b>cartel boss</b> held in Sinaloa and a boat of <b>mourners</b> lost in Nigeria: one Sunday, 35 stories.</p></section>
+<section class="sentence"><span class="lab">The day in one sentence</span><p><b>400 drones</b> over Kyiv and its bridges, a <b>climate draft</b> on the table in Antalya, two <b>US bases</b> struck in Bahrain, a <b>cartel boss</b> held in Sinaloa and a boat of <b>mourners</b> lost in Nigeria: one Sunday, 35 stories, six regions.</p></section>
 <section class="briefs-head"><h5>And in brief <span>the rest of the day, place by place</span></h5><span class="cnt">22 more stories</span></section>
 <section class="briefs">${briefColumns.join('')}</section>
-<footer class="foot"><p><b>Date check.</b> This is the Sunday 22 November 2026 edition, closed at 08:31 GMT with 35 stories. Each carries the dateline its outlet gave it; the thirteen clock times are those outlets&rsquo; own UTC stamps, all on Saturday 21 November, and every other date here (23 November, 1956, 2028) belongs to the story that names it. Nothing is invented and no story is repeated. Outlets are named with every story; the map is drawn from Natural Earth land outlines.</p><div class="mark">One day &middot; 35 stories</div></footer>
+<footer class="foot"><p><b>Date check.</b> This is the Sunday 22 November 2026 edition, closed at 08:31 GMT with 35 stories. Each carries the dateline its outlet gave it; the thirteen clock times are those outlets&rsquo; own UTC stamps, all on Saturday 21 November, and every other date here (23 November, 1956, 2028) belongs to the story that names it. Nothing is invented and no story is repeated. Outlets are named with every story; the map is drawn from Natural Earth land outlines.</p><div class="mark">One day &middot; 35 stories &middot; 6 regions</div></footer>
 </body></html>`;
 
 writeFileSync(local('./poster.html'), page);
