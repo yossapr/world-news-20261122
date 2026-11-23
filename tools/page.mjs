@@ -41,7 +41,7 @@ const regionKey = Object.entries(tally).sort((a, b) => b[1] - a[1])
   .map(([id, count]) => `<span class="rg"><i style="background:${regionStyle(id)[1]}"></i>${regionStyle(id)[0]}<b>${count}</b></span>`).join('');
 
 // Map: equirectangular, 64N..50S, one dot per dateline in its region's hue, the leads numbered.
-const FRAME = { top: 20, height: 114 };
+const FRAME = { top: 20, height: 110 };
 const plot = (lon, lat) => [lon + 180, 84 - Math.min(64, Math.max(-50, lat))];
 const dotFor = (story, radius) => {
   const [x, y] = plot(story.geo.lon, story.geo.lat);
@@ -152,6 +152,9 @@ const STAMP = new Map(edition.stories.map((story) => {
 if (STAMP.size !== 35) throw new Error(`expected 35 stamps, got ${STAMP.size}`);
 const stampOf = (n) => STAMP.get(n) ?? '22 NOV';
 
+// The band under the date: six figures the edition carries, each with a short label, set full width.
+const heroBand = `<section class="hero">${copy.hero.map((item) => `<div class="hcell"><div class="hfig">${escape(item.fig)}</div><div class="hlabel">${escape(item.label)}</div></div>`).join('')}</section>`;
+
 const clockBlock = `<section class="daystrip"><div class="ds-head"><h5>The filing clock, in UTC <span>thirteen reports stamped hour by hour, the last at 22:25 GMT, before this edition closed at 08:31 GMT</span></h5></div>
 <div class="ds-track">${CLOCK.map((tick) => `<div class="ds-i"><b>${tick.at}</b><span>${escape(tick.about)}</span></div>`).join('')}</div></section>`;
 
@@ -164,9 +167,84 @@ const leadBlock = (lead) => `<article class="lead"><div class="panel"><div class
 </div><div class="part">${DRAWING[lead.art]}</div></div>
 <h3>${lead.head.map(escape).join('<br>')}</h3><p class="deck">${escape(lead.deck)}</p><div class="src">${escape(lead.src)} &middot; <span class="ts">${stampOf(lead.n)}</span></div></article>`;
 
+// The ten card pictures, drawn at the block's own shape (188x58) from each story's facts: a flat
+// scene in the region's deep colour on its own tint, so the card reads as a colour mass with the
+// headline on top of it. Where a story has nothing to draw, a bold glyph carries the block instead.
+const SCENE = {
+  ship: (c, l) => `<rect x="0" y="34" width="188" height="24" fill="${c}" opacity=".32"/>
+<path d="M8 34h132l-8 9H18z" fill="${c}"/><rect x="86" y="22" width="30" height="12" fill="${c}"/>
+<g fill="${l}"><rect x="90" y="25" width="6" height="4"/><rect x="100" y="25" width="6" height="4"/><rect x="110" y="25" width="5" height="4"/></g>
+<path d="M56 30l7-18 8 18z" fill="#e0662f"/><path d="M67 30l6-12 6 12z" fill="#f0b24a"/>
+<g fill="#a9a294" opacity=".5"><circle cx="60" cy="9" r="5"/><circle cx="70" cy="5" r="5"/></g>
+<ellipse cx="156" cy="41" rx="14" ry="3" fill="${l}" opacity=".85"/><path d="M150 41c3-4 10-4 13 0" fill="none" stroke="${c}" stroke-width="1.4"/>`,
+  burst: (c, l) => `<rect x="22" y="4" width="126" height="54" fill="${c}"/>
+<g fill="${l}"><rect x="30" y="10" width="12" height="7"/><rect x="48" y="10" width="12" height="7"/><rect x="66" y="10" width="12" height="7"/><rect x="30" y="24" width="12" height="7"/><rect x="48" y="24" width="12" height="7"/><rect x="66" y="24" width="12" height="7"/><rect x="30" y="38" width="12" height="7"/><rect x="48" y="38" width="12" height="7"/></g>
+<path d="M84 4h36l-8 12-7-3-11 7-10-4z" fill="#f7f3ea"/><path d="M84 4h16l-5 7z" fill="${c}"/>
+<g fill="#cfc7b6"><circle cx="106" cy="18" r="2.6"/><circle cx="120" cy="12" r="2"/></g>
+<path d="${star(124, 7, 6)}" fill="#f0b24a"/>
+<path d="M162 58V20" stroke="${c}" stroke-width="2"/><path d="M162 28l8-5M162 36l10 3" stroke="${c}" stroke-width="1.2"/>`,
+  boat: (c, l) => `<rect x="0" y="26" width="188" height="32" fill="${c}" opacity=".3"/>
+<path d="M24 26L150 20l-8 14-110 5z" fill="${c}"/><path d="M24 26L150 20l-3 4-118 5z" fill="#f7f3ea" opacity=".85"/>
+<g fill="${c}"><circle cx="56" cy="14" r="4"/><circle cx="76" cy="12" r="4"/><circle cx="96" cy="11" r="4"/></g>
+<g stroke="${c}" stroke-width="2" stroke-linecap="round"><path d="M56 18v6M76 16v6M96 15v6"/></g>
+<g fill="none" stroke="${l}" stroke-width="1.4" opacity=".85"><path d="M16 36c9 4 18 4 27 0M120 32c9 4 18 4 27 0"/><path d="M22 44c10 4 19 4 29 0M116 40c10 4 19 4 29 0"/></g>`,
+  talks: (c, l) => `<rect x="0" y="44" width="188" height="14" fill="${c}" opacity=".28"/>
+<rect x="44" y="34" width="100" height="4" fill="${c}"/><path d="M54 38v12M134 38v12" stroke="${c}" stroke-width="2.2"/>
+<g fill="${c}" opacity=".55"><rect x="50" y="20" width="8" height="14" rx="2"/><rect x="130" y="20" width="8" height="14" rx="2"/></g>
+<g fill="${c}"><circle cx="38" cy="24" r="5"/><path d="M31 40c0-6 3-9 7-9s7 3 7 9z"/><circle cx="150" cy="24" r="5"/><path d="M143 40c0-6 3-9 7-9s7 3 7 9z"/></g>
+<g fill="#f7f3ea"><rect x="66" y="29" width="18" height="4"/><rect x="88" y="30" width="14" height="3"/><rect x="106" y="29" width="20" height="4"/></g>`,
+  aid: (c, l) => `<rect x="0" y="46" width="188" height="12" fill="${c}" opacity=".28"/>
+<path d="M22 22h92v18H22z" fill="#f7f3ea" stroke="${c}" stroke-width="1.6"/>
+<path d="M114 28h24l10 6v6h-34z" fill="#f7f3ea" stroke="${c}" stroke-width="1.6"/><path d="M119 30h14l6 5h-20z" fill="${l}"/>
+<g fill="${c}"><rect x="34" y="27" width="7" height="7"/><rect x="45" y="27" width="7" height="7"/><rect x="34" y="36" width="7" height="3"/><rect x="45" y="36" width="7" height="3"/></g>
+<g fill="#3a352c"><circle cx="40" cy="42" r="4"/><circle cx="132" cy="42" r="4"/></g>
+<path d="M76 22l9-7 7 7z" fill="#3a352c" opacity=".7"/>
+<g fill="${c}" opacity=".7"><rect x="150" y="34" width="16" height="9"/><rect x="154" y="26" width="16" height="7"/></g>`,
+  cuffs: (c, l) => `<rect x="0" y="46" width="188" height="12" fill="${c}" opacity=".28"/>
+<path d="M18 20h104v20H18z" fill="${c}"/><path d="M126 26h22l10 7v7h-32z" fill="${c}"/>
+<path d="M24 26h52v8H24z" fill="${l}" opacity=".9"/><path d="M131 30h12l6 4h-18z" fill="${l}" opacity=".9"/>
+<g stroke="${l}" stroke-width="1.5"><path d="M34 32v7M42 32v7M50 32v7M58 32v7M66 32v7"/></g>
+<g fill="#f0b24a"><rect x="48" y="15" width="7" height="4"/><rect x="57" y="15" width="7" height="4"/></g>
+<g fill="#3a352c"><circle cx="34" cy="44" r="4.2"/><circle cx="110" cy="44" r="4.2"/><circle cx="144" cy="44" r="3.6"/></g>
+<circle cx="166" cy="28" r="4.6" fill="${c}"/><path d="M160 44c0-6 3-9 6-9s6 3 6 9z" fill="${c}"/>`,
+  bolt: (c, l) => `<rect x="0" y="0" width="188" height="58" fill="${c}" opacity=".18"/>
+<g fill="${c}"><rect x="10" y="24" width="18" height="34"/><rect x="32" y="14" width="22" height="44"/><rect x="58" y="28" width="14" height="30"/><rect x="76" y="8" width="20" height="50"/><rect x="100" y="22" width="16" height="36"/><rect x="120" y="16" width="22" height="42"/></g>
+<g fill="${l}"><rect x="36" y="20" width="4" height="4"/><rect x="45" y="20" width="4" height="4"/><rect x="80" y="16" width="4" height="4"/><rect x="89" y="16" width="4" height="4"/><rect x="80" y="27" width="4" height="4"/><rect x="124" y="24" width="4" height="4"/><rect x="133" y="24" width="4" height="4"/></g>
+<g fill="#3a352c" opacity=".45"><rect x="36" y="32" width="4" height="4"/><rect x="45" y="32" width="4" height="4"/><rect x="89" y="27" width="4" height="4"/><rect x="124" y="36" width="4" height="4"/></g>
+<path d="M160 6v50M152 56l8-12 8 12" stroke="${c}" stroke-width="1.5" fill="none"/><path d="M157 10h6M158 22h10"/>
+<path d="M176 10l-7 10h6l-3 9 9-11h-6z" fill="#f0b24a"/>`,
+  probe: (c, l) => `<rect x="0" y="0" width="188" height="58" fill="${c}" opacity=".12"/>
+<g stroke="${c}" stroke-width="1" opacity=".5"><path d="M18 4v48M18 52h156"/></g>
+<g fill="${c}" opacity=".45"><rect x="30" y="20" width="14" height="32"/><rect x="50" y="14" width="14" height="38"/><rect x="70" y="10" width="14" height="42"/><rect x="90" y="16" width="14" height="36"/><rect x="110" y="24" width="14" height="28"/><rect x="130" y="32" width="14" height="20"/></g>
+<path d="M24 12L56 10l24-2 22 8 20 12 18 12" fill="none" stroke="#b3261e" stroke-width="2.4" stroke-linejoin="round"/>
+<path d="M162 52l-11-2 7-7z" fill="#b3261e"/>`,
+  pulse: (c, l) => `<rect x="0" y="46" width="188" height="12" fill="${c}" opacity=".24"/>
+<path d="M20 32h96v5H20z" fill="${c}"/><path d="M26 37v12M110 37v12" stroke="${c}" stroke-width="2.2"/>
+<path d="M116 26h5v16h-5z" fill="${c}"/><path d="M120 26c0-4 5-4 5 0" fill="none" stroke="${c}" stroke-width="2"/>
+<path d="M28 26h78v6H28z" fill="#f7f3ea" stroke="${c}" stroke-width="1.2"/><circle cx="38" cy="22" r="4.6" fill="${c}"/>
+<rect x="142" y="8" width="42" height="28" rx="2" fill="${c}"/>
+<path d="M146 26h6l3-8 5 13 3-6h6l3-3h6" fill="none" stroke="${l}" stroke-width="1.5" stroke-linejoin="round"/>`,
+  sub: (c, l) => `<rect x="0" y="32" width="188" height="26" fill="${c}" opacity=".3"/>
+<path d="M14 40c0-6 10-10 28-10h38c16 0 26 3 26 10s-10 8-26 8H42c-18 0-28-2-28-8z" fill="${c}"/>
+<path d="M74 30v-7h12v7z" fill="${c}"/><path d="M79 23v-5h3v5z" fill="${c}"/>
+<g stroke="${l}" stroke-width="1.1" opacity=".8"><path d="M28 44h22M60 45h26M100 44h14"/></g>
+<g transform="rotate(-6 148 26)"><rect x="120" y="10" width="54" height="28" fill="#f7f3ea" stroke="${c}" stroke-width="1.2"/>
+<g stroke="${c}" stroke-width="1.3" opacity=".55"><path d="M128 17h26M128 22h34M128 27h20"/></g>
+<g stroke="#b3261e" stroke-width="2.4"><path d="M140 13l20 20M160 13l-20 20"/></g></g>`,
+};
+
+// A story with nothing to draw still gets the colour mass: a bold glyph at the block's own size.
+const cardArt = (card) => {
+  const region = regionStyle(storyAt(card.n).region);
+  const scene = SCENE[card.glyph];
+  if (scene) return `<svg viewBox="0 0 188 58" preserveAspectRatio="none" aria-hidden="true">${scene(region[1], region[2])}</svg>`;
+  return `<div class="cglyph" style="color:${region[2]}">${ICON[card.glyph] ?? ''}</div>`;
+};
+
 const cardBlock = (card) => `<article class="card" style="--gc:${regionStyle(storyAt(card.n).region)[1]}">
-<div class="chead"><span class="ck">${escape(`${card.p} · ${card.t}`)}</span><span class="cg">${ICON[card.glyph] ?? ''}</span></div>
-<h4>${escape(card.h)}</h4><p><b>${escape(card.d)}</b> &middot; ${escape(card.b)}</p><div class="src">${escape(card.s)} &middot; <span class="ts">${stampOf(card.n)}</span></div></article>`;
+<div class="cblock">${cardArt(card)}<div class="cplace">${escape(card.p)}</div><div class="cbig">${escape(card.big)}</div></div>
+<p class="cdetail">${escape(card.b)}</p>
+<div class="csrc"><span class="ctag">${escape(card.tag)}</span> &middot; ${escape(card.s)} &middot; <span class="ts">${stampOf(card.n)}</span></div></article>`;
 
 const briefItem = (item) => `<li style="--gc:${regionStyle(storyAt(item.n).region)[1]}"><b>${escape(item.p)}</b> ${escape(item.t)} <span class="bs">${escape(item.s)} &middot; <span class="ts">${stampOf(item.n)}</span></span></li>`;
 
@@ -196,6 +274,11 @@ body{background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-s
 .mast h1{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:48px;line-height:.94;letter-spacing:-.028em}
 .mast .side{text-align:right;font-size:8.6px;line-height:1.35;letter-spacing:.1em;text-transform:uppercase;color:#4a433b;padding-bottom:3px;white-space:nowrap}
 .mast .side b{display:block;font-size:10.6px;letter-spacing:.01em;text-transform:none;color:var(--ink);font-family:Georgia,serif;font-style:italic;font-weight:400;margin:1px 0}
+.hero{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));background:#15120e;color:#f7f3ea;margin-bottom:2px}
+.hcell{padding:2px 10px 3px;border-left:1px solid #3b352c;min-width:0}
+.hcell:first-child{border-left:0}
+.hfig{font-family:Georgia,serif;font-size:26px;font-weight:700;line-height:.94;letter-spacing:-.02em;color:var(--amber)}
+.hlabel{font-size:6.6px;line-height:1.14;letter-spacing:.06em;text-transform:uppercase;color:#d9d0c1;margin-top:1px;white-space:nowrap;overflow:hidden}
 .daystrip{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:3px 0 4px}
 .daystrip .ds-head{display:flex;align-items:baseline;gap:0}
 .daystrip h5{margin:0 0 3px}
@@ -208,7 +291,7 @@ body{background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-s
 .ds-i span{display:block;font-size:7.5px;line-height:1.15;margin-top:1.5px;white-space:nowrap;overflow:hidden}
 .leads{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 14px}
 .lead{min-width:0;display:flex;flex-direction:column}
-.panel{position:relative;display:flex;height:132px;overflow:hidden;background:#123029}
+.panel{position:relative;display:flex;height:106px;overflow:hidden;background:#123029}
 .lead:nth-child(2) .panel{background:#13253c}
 .lead:nth-child(3) .panel{background:#2a1512}
 .panel .part{position:absolute;right:0;top:0;width:164px;height:132px}
@@ -244,7 +327,17 @@ h5 span{color:var(--muted);letter-spacing:.04em;text-transform:none;font-weight:
 .nc{font-size:7.1px;line-height:1.12;color:#e8dfd2;margin-top:1px;padding-right:2px}
 .ns{color:#a89c8d;font-size:6.4px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
 .cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0 12px;align-content:start}
-.card{padding:1px 0 1px;border-top:3px solid var(--gc);min-width:0}
+.card{padding:0 0 2px;border-top:3px solid var(--gc);min-width:0}
+.cblock{position:relative;height:46px;overflow:hidden;background:#1b1b1b}
+.cblock svg{display:block;width:100%;height:46px}
+.cblock::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.66) 100%);z-index:1}
+.cplace{position:absolute;left:5px;top:3px;z-index:2;font-size:6.5px;letter-spacing:.08em;text-transform:uppercase;color:#fff;opacity:.9;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.ctag{color:var(--accent);font-weight:700}
+.cbig{position:absolute;left:5px;right:5px;bottom:3px;z-index:2;font-size:16px;line-height:.96;font-weight:700;letter-spacing:-.005em;color:#fff;text-transform:uppercase;text-shadow:0 1px 3px rgba(0,0,0,.55)}
+.cglyph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.cglyph svg{width:34px;height:34px}
+.cdetail{font-size:9.2px;line-height:1.12;color:#3d372f;margin-top:1px}
+.csrc{font-size:6.9px;letter-spacing:.05em;text-transform:uppercase;color:#8a8074;margin-top:0;white-space:nowrap;overflow:hidden}
 .chead{display:flex;justify-content:space-between;align-items:center;gap:4px;min-height:25px}
 .ck{flex:1 1 auto;min-width:0;font-size:6.9px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;white-space:nowrap;overflow:hidden}
 .cg{flex:0 0 24px;width:24px;height:24px;color:var(--gc)}
@@ -260,7 +353,7 @@ h5 span{color:var(--muted);letter-spacing:.04em;text-transform:none;font-weight:
 .briefs-head{border-top:1px solid var(--soft);padding-top:3px;display:flex;justify-content:space-between;align-items:baseline}
 .briefs-head h5{margin:0}
 .briefs-head .cnt{font-size:7.8px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.briefs{flex:1;min-height:0;border-top:1px solid var(--soft);padding:5px 0 3px;margin-top:3px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 16px}
+.briefs{flex:1;min-height:0;border-top:1px solid var(--soft);padding:4px 0 2px;margin-top:3px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 16px}
 ul.b{list-style:none;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
 ul.b li{font-size:10.4px;line-height:1.13;color:#2b2620;padding-left:9px;position:relative}
 ul.b li::before{content:'';position:absolute;left:0;top:5px;width:4px;height:4px;background:var(--gc)}
@@ -278,6 +371,7 @@ const page = `<!doctype html>
 <body>
 <div class="rail"><span><b>The world in one day</b></span><span class="date">Sunday 22 November 2026</span><span>35 stories &middot; 6 regions &middot; every one sourced</span></div>
 <header class="mast"><h1>Sunday 22 November 2026</h1><div class="side">A front page of the day&rsquo;s reporting<b>35 stories, from Sinaloa to Canberra</b></div></header>
+${heroBand}
 ${clockBlock}
 <section class="leads">${copy.leads.map(leadBlock).join('')}</section>
 <section class="mid"><div><h5>Where it happened, Sunday 22 November 2026 <span>one dot for each dateline, coloured by region; the numbered three are the leads</span></h5>${worldMap}<div class="regions">${regionKey}</div></div><div class="nums-panel"><h5>The day in numbers <span>as its outlets reported them</span></h5><div class="nums">${copy.figures.map(figureBlock).join('')}</div></div></section>
