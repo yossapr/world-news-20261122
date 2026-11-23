@@ -343,6 +343,11 @@
   ],
   "figures": [
     {
+      "fig": "400",
+      "cap": "drones in Russia’s overnight attack",
+      "s": "Al Jazeera"
+    },
+    {
       "fig": "110",
       "cap": "missiles in the same attack",
       "s": "Al Jazeera"
@@ -358,29 +363,24 @@
       "s": "Al Jazeera"
     },
     {
-      "fig": "300",
-      "cap": "aboard the mourners’ boat in Bayelsa",
+      "fig": "24",
+      "cap": "dead when a mourners’ boat sank in Bayelsa",
       "s": "Sky News"
     },
     {
-      "fig": "25",
-      "cap": "apartment blocks damaged in Kryvyi Rih",
-      "s": "Al Jazeera"
+      "fig": "23,000",
+      "cap": "workers IG Metall calls out on Monday",
+      "s": "Reuters"
     },
     {
-      "fig": "16",
-      "cap": "crew taken off the burning cargo ship",
-      "s": "BBC"
+      "fig": "14%",
+      "cap": "Nvidia’s one-day fall; 20% for the week",
+      "s": "Straits Times"
     },
     {
       "fig": "$5m",
       "cap": "US reward for the cartel boss held in Sinaloa",
       "s": "BBC"
-    },
-    {
-      "fig": "10 yrs",
-      "cap": "of EU and Indonesia trade talks, now a deal",
-      "s": "DW"
     },
     {
       "fig": "15 km",
@@ -412,31 +412,5 @@
       "dy": 1.5,
       "anchor": ""
     }
-  },
-  "hero": [
-    {
-      "fig": "1.5°C",
-      "label": "the limit the draft admits"
-    },
-    {
-      "fig": "400",
-      "label": "drones over Ukraine"
-    },
-    {
-      "fig": "2",
-      "label": "US bases struck"
-    },
-    {
-      "fig": "24",
-      "label": "dead in a boat"
-    },
-    {
-      "fig": "23,000",
-      "label": "German workers out"
-    },
-    {
-      "fig": "14%",
-      "label": "Nvidia’s one-day fall"
-    }
-  ]
+  }
 }

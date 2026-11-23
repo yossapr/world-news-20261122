@@ -41,7 +41,7 @@ const regionKey = Object.entries(tally).sort((a, b) => b[1] - a[1])
   .map(([id, count]) => `<span class="rg"><i style="background:${regionStyle(id)[1]}"></i>${regionStyle(id)[0]}<b>${count}</b></span>`).join('');
 
 // Map: equirectangular, 64N..50S, one dot per dateline in its region's hue, the leads numbered.
-const FRAME = { top: 20, height: 110 };
+const FRAME = { top: 20, height: 111 };
 const plot = (lon, lat) => [lon + 180, 84 - Math.min(64, Math.max(-50, lat))];
 const dotFor = (story, radius) => {
   const [x, y] = plot(story.geo.lon, story.geo.lat);
@@ -152,8 +152,12 @@ const STAMP = new Map(edition.stories.map((story) => {
 if (STAMP.size !== 35) throw new Error(`expected 35 stamps, got ${STAMP.size}`);
 const stampOf = (n) => STAMP.get(n) ?? '22 NOV';
 
-// The band under the date: six figures the edition carries, each with a short label, set full width.
-const heroBand = `<section class="hero">${copy.hero.map((item) => `<div class="hcell"><div class="hfig">${escape(item.fig)}</div><div class="hlabel">${escape(item.label)}</div></div>`).join('')}</section>`;
+// The segmented bar under the date: one coloured segment per region, each with its count, and the
+// segments must add up to the stories on the page.
+const regionTotal = Object.values(tally).reduce((sum, count) => sum + count, 0);
+if (regionTotal !== edition.stories.length) throw new Error(`region bar sums to ${regionTotal}, not ${edition.stories.length}`);
+const regionBar = `<section class="rbar">${Object.entries(tally).sort((a, b) => b[1] - a[1])
+  .map(([id, count]) => `<div class="rseg" style="flex-grow:${count};background:${regionStyle(id)[1]}"><span>${regionStyle(id)[0]}</span><b>${count}</b></div>`).join('')}</section>`;
 
 const clockBlock = `<section class="daystrip"><div class="ds-head"><h5>The filing clock, in UTC <span>thirteen reports stamped hour by hour, the last at 22:25 GMT, before this edition closed at 08:31 GMT</span></h5></div>
 <div class="ds-track">${CLOCK.map((tick) => `<div class="ds-i"><b>${tick.at}</b><span>${escape(tick.about)}</span></div>`).join('')}</div></section>`;
@@ -274,11 +278,9 @@ body{background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-s
 .mast h1{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:48px;line-height:.94;letter-spacing:-.028em}
 .mast .side{text-align:right;font-size:8.6px;line-height:1.35;letter-spacing:.1em;text-transform:uppercase;color:#4a433b;padding-bottom:3px;white-space:nowrap}
 .mast .side b{display:block;font-size:10.6px;letter-spacing:.01em;text-transform:none;color:var(--ink);font-family:Georgia,serif;font-style:italic;font-weight:400;margin:1px 0}
-.hero{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));background:#15120e;color:#f7f3ea;margin-bottom:2px}
-.hcell{padding:2px 10px 3px;border-left:1px solid #3b352c;min-width:0}
-.hcell:first-child{border-left:0}
-.hfig{font-family:Georgia,serif;font-size:26px;font-weight:700;line-height:.94;letter-spacing:-.02em;color:var(--amber)}
-.hlabel{font-size:6.6px;line-height:1.14;letter-spacing:.06em;text-transform:uppercase;color:#d9d0c1;margin-top:1px;white-space:nowrap;overflow:hidden}
+.rbar{display:flex;height:17px;margin-bottom:1px}
+.rseg{flex:1 1 0;flex-basis:0;min-width:62px;display:flex;align-items:center;justify-content:center;gap:4px;color:#f7f3ea;font-size:6.6px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;white-space:nowrap;overflow:hidden}
+.rseg b{font-size:9px;letter-spacing:0}
 .daystrip{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:3px 0 4px}
 .daystrip .ds-head{display:flex;align-items:baseline;gap:0}
 .daystrip h5{margin:0 0 3px}
@@ -291,7 +293,7 @@ body{background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-s
 .ds-i span{display:block;font-size:7.5px;line-height:1.15;margin-top:1.5px;white-space:nowrap;overflow:hidden}
 .leads{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 14px}
 .lead{min-width:0;display:flex;flex-direction:column}
-.panel{position:relative;display:flex;height:106px;overflow:hidden;background:#123029}
+.panel{position:relative;display:flex;height:122px;overflow:hidden;background:#123029}
 .lead:nth-child(2) .panel{background:#13253c}
 .lead:nth-child(3) .panel{background:#2a1512}
 .panel .part{position:absolute;right:0;top:0;width:164px;height:132px}
@@ -328,8 +330,8 @@ h5 span{color:var(--muted);letter-spacing:.04em;text-transform:none;font-weight:
 .ns{color:#a89c8d;font-size:6.4px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
 .cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0 12px;align-content:start}
 .card{padding:0 0 2px;border-top:3px solid var(--gc);min-width:0}
-.cblock{position:relative;height:46px;overflow:hidden;background:#1b1b1b}
-.cblock svg{display:block;width:100%;height:46px}
+.cblock{position:relative;height:49px;overflow:hidden;background:#1b1b1b}
+.cblock svg{display:block;width:100%;height:49px}
 .cblock::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.66) 100%);z-index:1}
 .cplace{position:absolute;left:5px;top:3px;z-index:2;font-size:6.5px;letter-spacing:.08em;text-transform:uppercase;color:#fff;opacity:.9;text-shadow:0 1px 2px rgba(0,0,0,.6)}
 .ctag{color:var(--accent);font-weight:700}
@@ -371,7 +373,7 @@ const page = `<!doctype html>
 <body>
 <div class="rail"><span><b>The world in one day</b></span><span class="date">Sunday 22 November 2026</span><span>35 stories &middot; 6 regions &middot; every one sourced</span></div>
 <header class="mast"><h1>Sunday 22 November 2026</h1><div class="side">A front page of the day&rsquo;s reporting<b>35 stories, from Sinaloa to Canberra</b></div></header>
-${heroBand}
+${regionBar}
 ${clockBlock}
 <section class="leads">${copy.leads.map(leadBlock).join('')}</section>
 <section class="mid"><div><h5>Where it happened, Sunday 22 November 2026 <span>one dot for each dateline, coloured by region; the numbered three are the leads</span></h5>${worldMap}<div class="regions">${regionKey}</div></div><div class="nums-panel"><h5>The day in numbers <span>as its outlets reported them</span></h5><div class="nums">${copy.figures.map(figureBlock).join('')}</div></div></section>
