@@ -39,6 +39,10 @@ for (const tick of CLOCK) {
 
 const regionKey = Object.entries(tally).sort((a, b) => b[1] - a[1])
   .map(([id, count]) => `<span class="rg"><i style="background:${regionStyle(id)[1]}"></i>${regionStyle(id)[0]}<b>${count}</b></span>`).join('');
+// One region statement, in the key, summing to the stories on the page: no other line names a count.
+const regionTotal = Object.values(tally).reduce((sum, count) => sum + count, 0);
+if (regionTotal !== edition.stories.length) throw new Error(`region key sums to ${regionTotal}, not ${edition.stories.length}`);
+const regionLine = `<span class="rlab">${Object.keys(tally).length} regions, ${regionTotal} stories</span>${regionKey}`;
 
 // Map: equirectangular, 64N..50S, one dot per dateline in its region's hue, the leads numbered.
 const FRAME = { top: 20, height: 114 };
@@ -233,6 +237,7 @@ h5 span{color:var(--muted);letter-spacing:.04em;text-transform:none;font-weight:
 .ml{font:700 5.6px Arial;fill:#f4efe3;letter-spacing:.03em;paint-order:stroke;stroke:#0f2433;stroke-width:1.2}
 .mn{font:700 5.1px Arial;fill:#f9f5ea;text-anchor:middle}
 .regions{display:flex;flex-wrap:wrap;gap:1px 11px;margin-top:3px;align-items:center}
+.rlab{font-size:7.4px;letter-spacing:.1em;text-transform:uppercase;color:#4a433b;font-weight:700;margin-right:3px}
 .rg{font-size:8px;color:#3d372f;display:inline-flex;align-items:center;gap:3px}
 .rg i{width:6px;height:6px;display:inline-block}
 .rg b{margin-left:1px}
@@ -276,16 +281,16 @@ ul.b li b{font-weight:700}
 const page = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Sunday 22 November 2026</title><style>${stylesheet}</style></head>
 <body>
-<div class="rail"><span><b>The world in one day</b></span><span class="date">Sunday 22 November 2026</span><span>35 stories &middot; 6 regions &middot; every one sourced</span></div>
+<div class="rail"><span><b>The world in one day</b></span><span class="date">Sunday 22 November 2026</span><span>35 stories &middot; every one sourced</span></div>
 <header class="mast"><h1>Sunday 22 November 2026</h1><div class="side">A front page of the day&rsquo;s reporting<b>35 stories, from Sinaloa to Canberra</b></div></header>
 ${clockBlock}
 <section class="leads">${copy.leads.map(leadBlock).join('')}</section>
-<section class="mid"><div><h5>Where it happened, Sunday 22 November 2026 <span>one dot for each dateline, coloured by region; the numbered three are the leads</span></h5>${worldMap}<div class="regions">${regionKey}</div></div><div class="nums-panel"><h5>The day in numbers <span>as its outlets reported them</span></h5><div class="nums">${copy.figures.map(figureBlock).join('')}</div></div></section>
+<section class="mid"><div><h5>Where it happened, Sunday 22 November 2026 <span>one dot for each dateline, coloured by region; the numbered three are the leads</span></h5>${worldMap}<div class="regions">${regionLine}</div></div><div class="nums-panel"><h5>The day in numbers <span>as its outlets reported them</span></h5><div class="nums">${copy.figures.map(figureBlock).join('')}</div></div></section>
 <section class="cards">${copy.cards.map(cardBlock).join('')}</section>
-<section class="sentence"><span class="lab">The day in one sentence</span><p><b>400 drones</b> over Kyiv and its bridges, a <b>climate draft</b> on the table in Antalya, two <b>US bases</b> struck in Bahrain, a <b>cartel boss</b> held in Sinaloa and a boat of <b>mourners</b> lost in Nigeria: one Sunday, 35 stories, six regions.</p></section>
+<section class="sentence"><span class="lab">The day in one sentence</span><p><b>400 drones</b> over Kyiv and its bridges, a <b>climate draft</b> on the table in Antalya, two <b>US bases</b> struck in Bahrain, a <b>cartel boss</b> held in Sinaloa and a boat of <b>mourners</b> lost in Nigeria: one Sunday, 35 stories.</p></section>
 <section class="briefs-head"><h5>And in brief <span>the rest of the day, place by place</span></h5><span class="cnt">22 more stories</span></section>
 <section class="briefs">${briefColumns.join('')}</section>
-<footer class="foot"><p><b>Date check.</b> This is the Sunday 22 November 2026 edition, closed at 08:31 GMT with 35 stories. Each carries the dateline its outlet gave it; the thirteen clock times are those outlets&rsquo; own UTC stamps, all on Saturday 21 November, and every other date here (23 November, 1956, 2028) belongs to the story that names it. Nothing is invented and no story is repeated. Outlets are named with every story; the map is drawn from Natural Earth land outlines.</p><div class="mark">One day &middot; 35 stories &middot; 6 regions</div></footer>
+<footer class="foot"><p><b>Date check.</b> This is the Sunday 22 November 2026 edition, closed at 08:31 GMT with 35 stories. Each carries the dateline its outlet gave it; the thirteen clock times are those outlets&rsquo; own UTC stamps, all on Saturday 21 November, and every other date here (23 November, 1956, 2028) belongs to the story that names it. Nothing is invented and no story is repeated. Outlets are named with every story; the map is drawn from Natural Earth land outlines.</p><div class="mark">One day &middot; 35 stories</div></footer>
 </body></html>`;
 
 writeFileSync(local('./poster.html'), page);
